@@ -1,0 +1,59 @@
+# QUalquer programa Python em execução tem diversos dicionários ativos simultaneamente, mesmo que o código do programa do usuário
+# não utilize explicitamente um dicionário.
+# Dicionários trazem um KVP
+
+# as próprias funções embutidas ficam em um dicionário: __builtins__.__dict__
+
+# Os dicionários em Python são extremamente otimizados -> as tabelas hash são o mecanismo responsável pelo seu alto desempenho
+
+# MY_DICT = {} --------> entre chaves. Listas entre colchetes. Tuplas entre parênteses
+# Todos os tipos de mapeamento da biblioteca-padrão usam o tipo básico dict em sua implementação, portanto uma limitação comum a esses tipos
+# é que as chaves precisam ser hashable (os valores não precisam ser hashable, somente as chaves)
+
+my_dict = {}
+isinstance(my_dict,abc.Mapping)
+isinstance(my_dict,int)
+
+# O que é hashable? um objeto é hashable se tiver um valor de hash que nunca mude durante seu tempo de vida
+# deve ter um método __hash__() e puder ser comparado com outros objetos (deve ter um método __eq__()). 
+# Objetos hashable comparados como iguais devem ter o mesmo valor de hash 
+
+# Os tipos imutáveis atômicos (str, bytes, tipos numéricos) são todos hashable. Um fronzenset,
+# é sempre hashable porque seus elementos devem ser hashable por definição. Uma tupla será hashable somente se todos os seus itens forem
+# hashable.
+
+tt = (1,2,(30,40))
+hash(tt) 
+tl = (1,2,[30,40]) # Aqui temos uma lista aninhada em uma tupla - linhas são unhashables. Irá gerar erro.
+hash(tl)
+tf = (1,2,frozenset([30,40]))
+hash(tf)
+
+# Os tipos definidos por usuário são hashable por padrão, pois seus valores de hash são seus id() e, na comparação,
+# todos são diferentes. Se um objeto implementar um __eq__  personalizado que leve em consideração o seu estado interno, ele poderá
+# ser hashable somente se todos os seus atributos forem imutáveis.
+
+a = dict(one=1, two=2, three=3)
+b = {'one': 1, 'two': 2, 'three': 3}
+c = dict((zip['one','two','three'], [1,2,3]))
+d = dict([('two',2),('one',1),('three',3)])
+e = dict({'three':3,'one':1,'two':2})
+a==b==c==d==e
+
+# uma dict comprehension (dictcomp) cria uma instância de dict produzindo pares key:value a partir de qualquer iterável.
+
+DIAL_CODES = [
+  (86,'China'),
+  (91,'India'),
+  (1,'United States'),
+  (62,'Indonesia'),
+  (55,'Brazil'),
+  (92,'Pakistan'),
+  (880,'Bangladesh'),
+  (234,'Nigeria'),
+  (7,'Russia'),
+  (81,'Japan')]
+country_code = {country: code for code, country in DIAL_CODES}
+country_code
+{code:country.upper() for country,code in country_code.items() if code < 66}
+  
