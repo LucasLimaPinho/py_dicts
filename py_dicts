@@ -56,4 +56,71 @@ DIAL_CODES = [
 country_code = {country: code for code, country in DIAL_CODES}
 country_code
 {code:country.upper() for country,code in country_code.items() if code < 66}
-  
+ 
+import sys
+import re
+
+WORD_RE = re.compile('\w+')
+index={}
+with open(sys.argv[1], encoding = 'utf-8') as fp:
+  for line_no, line in enumerate(fp,1):
+    for match in WORD_RE.finditer(line):
+      word = match.group()
+      column_no = match.start() + 1
+      location = (line_no., column_no)
+      index.setdefault(word,[]).append(location)
+for word in sorted(index, key = str.upper):
+  print(word, index[word])
+
+# Os conjuntos (sets) são acréscimos relativamente novos a história do Python e são subutilizados. O tipo set e seu irmão
+# imutável frozenset apareceram inicialmente em um módulo de Python 2.3 e foram promovidos a tipos embutidos em Python 2.6.
+# UM CONJUNTO É UMA COLEÇÃO DE OBJETOS ÚNICOS - um caso de uso básico é remover duplicações
+
+
+l = ['spam','spam','eggs','spam']
+set(l)
+
+# Elementos de conjunto devem ser hashable. o tipo set não é hashable, mas frozenset é, portanto podem ter elementos frozenset
+# em um set. 
+
+# Além de garantir a unicidade, conjuntos implementam as operações essenciais de conjuntos como operadores infixos:; sendo assim
+# dados dois conjuntos a e b, a | b devolve a união, a & b devolve a intersecção e a-b calcula a diferença entre dois conjuntos.
+# Retira muita lógica condicional do programa.
+
+s ={1}
+type(s)
+s.pop()
+
+frozenset(range(10)) # hashable e imutável
+# em a.union(b,c,d) --> b,c,d podem ser iteráveis de qualquer jeito. somente 'a' necessariamente precisa ser um set
+
+# dicts e sets são bem mais rápidos que lists. Python utiliza uma tabela HASH para implementar um dict - otimização do código CPython.
+
+# Uma tabela hash é um array esparso (ou seja, um array que sempre tem células vazias). Em textos-padrões sobre estruturas de dados,
+# as células em uma tabela hash geralmente são chamadas de "buckets". Como todos os buckets têm o mesmo tamanho, o acesso a um bucket
+# individual é feito pelo offset. O interpretador Python tenta manter pelo menos um terço dos buckets vazio; 
+# O interpretador tenta manter a tabela hash esparsa - se a tabela hash ficar muito cheia, ela será copiada para um novo local, com 
+# espaço para mais buckets.
+
+# Para colocar um item em uma tabela hash, o primeiro passo é calcular o valor de hash da chave do item, o que é feito com a 
+# função embutida hash() - chama o dunder method __hash__
+
+# Se dois objetos forem comparados como iguais, seus valores de hash também devem ser iguais. Se 1 == 1.0, então hash(1) = hash (1.0)
+
+# Além disso, para ser eficiente como índices da tabela hash, os valores de hash devem estar espalhados o máximo possível
+# no espaço usadp pelos índices. Isso quer dizer que, idealmente, objetos semelhantes mas não iguais devem ter valores de hash bem 
+# diferentes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
